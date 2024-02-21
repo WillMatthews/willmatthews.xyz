@@ -5,6 +5,14 @@ import           Hakyll
 
 
 --------------------------------------------------------------------------------
+
+{-
+ - Hakyll file for building willmatthews.xyz
+ - Author: WillMatthews
+ - Date: 2024-02-21
+-}
+
+
 main :: IO ()
 main = hakyll $ do
     match "images/*" $ do
