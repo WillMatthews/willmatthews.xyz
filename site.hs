@@ -25,8 +25,29 @@ main = hakyll $ do
         route $ setExtension "html"
         compile $ pandocCompiler
             >>= loadAndApplyTemplate "templates/post.html"    postCtx
+            >>= saveSnapshot "content"
             >>= loadAndApplyTemplate "templates/default.html" postCtx
             >>= relativizeUrls
+
+    create ["atom.xml"] $ do
+        route idRoute
+        compile $ do
+            let feedCtx = postCtx `mappend`
+                constField "description" "This is the post description"
+
+            posts <- fmap (take 10) . recentFirst =<<
+                 loadAllSnapshots "posts/*" "content"
+            renderAtom myFeedConfiguration feedCtx posts
+
+    create ["index.xml"] $ do
+        route idRoute
+        compile $ do
+            let feedCtx = postCtx `mappend`
+                constField "description" "This is the post description"
+
+            posts <- fmap (take 10) . recentFirst =<<
+                loadAllSnapshots "posts/*" "content"
+            renderRss myFeedConfiguration feedCtx posts
 
     create ["archive.html"] $ do
         route idRoute
@@ -64,3 +85,17 @@ postCtx :: Context String
 postCtx =
     dateField "date" "%B %e, %Y" `mappend`
     defaultContext
+
+
+myFeedConfiguration :: FeedConfiguration
+myFeedConfiguration = FeedConfiguration
+    { feedTitle       = "William Matthews - EE, ML, SW"
+    , feedDescription = "This feed provides William Matthews' website."
+    , feedAuthorName  = "William Matthews"
+    , feedAuthorEmail = "test@example.com"
+    , feedRoot        = "http://willmatthews.xyz"
+    }
+
+-- type Snapshot = String
+-- saveSnapshot :: (Typeable a, Binary a)
+--            => Snapshot -> Item a -> Compiler (Item a)
