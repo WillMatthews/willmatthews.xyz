@@ -2,6 +2,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 import           Data.Monoid (mappend)
 import           Hakyll
+import           Hakyll.Web.Sass (sassCompiler)
 
 --------------------------------------------------------------------------------
 main :: IO ()
@@ -70,6 +71,12 @@ main = hakyll $ do
     match "css/*" $ do
         route   idRoute
         compile compressCssCompiler
+    
+    match "scss/*" $ do
+        route   $ setExtension "css"
+        compile $ getResourceString
+            >>= sassCompiler
+            >>= return . fmap compressCss
 
 --------------------------------------------------------------------------------
 
