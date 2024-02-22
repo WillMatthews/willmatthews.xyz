@@ -1,0 +1,146 @@
+.c-header {
+  margin-bottom: 2em;
+  padding: 0.5em;
+  display: flex;
+  align-items: center;
+  justify-content: first baseline;
+  height: 30px;
+  //background-color: $background;
+
+  // make it glassy black with a vertical gradient
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0) 90%
+  );
+
+  // filter background to make it glassy
+  // make it glassy black
+  // make the blur amount a linear function of the distance from the top of the page
+  backdrop-filter: blur(1px);
+
+  // permanently position at top of page
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+
+  &__logo {
+    // inline
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5em;
+    //float: left;
+
+    // items are in a row, not vertically stacked.
+
+    &--image {
+      width: 50px;
+      height: 30px;
+      object-fit: contain;
+
+      // make background color a gradient
+      //background-color: $main;
+
+      // image is a SVG. Set stroke color to main color
+      stroke: $main;
+    }
+  }
+
+  &__name {
+    font-size: 20px;
+    font-weight: 700;
+    padding: 0 0.5em;
+
+    margin: 0;
+    color: $main;
+    text-decoration: none;
+    font-family: "Titillium Web";
+    font-weight: 700;
+  }
+
+  &__nav {
+    // inline
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5em;
+    //float: right;
+
+    // items are in a row, not vertically stacked.
+    &__item {
+      margin: 0 0.5em;
+      color: $main;
+      font-family: "Titillium Web";
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 20px;
+    }
+  }
+}
+
+.c-footer {
+  // full width at bottom of page
+
+  text-align: center;
+  // full width at bottom of page, not fixed.
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  position: relative;
+  width: 100%;
+  // lock to bottom of page, not viewport
+  bottom: 0;
+
+  &--row {
+    //display: flex;
+    //justify-content: space-between;
+    height: 2em;
+
+    $base-height: 10em;
+    $d: 49;
+    $h: 0.015em;
+
+    @for $i from 1 through $d {
+      &:nth-of-type(odd) {
+        background-color: $main;
+        &:nth-of-type(#{$i}) {
+          //height: $base-height / pow(29 - $i, 1.2)
+          //height: $base-height / pow(i, 1.2)
+          height: $i * $h;
+        }
+      }
+      &:nth-of-type(even) {
+        background-color: $background;
+        &:nth-of-type(#{$i}) {
+          height: ($d - $i) * $h;
+        }
+      }
+    }
+
+    &__w {
+      background-color: $main;
+      height: 5em;
+      color: $background;
+      font-family: "Titillium Web";
+    }
+  }
+  &--copyright {
+    color: $background;
+    font-family: "Titillium Web";
+
+    // copyright symbol
+    &::before {
+      content: "©";
+      font-size: 1.5em;
+      // move down to align with text
+      position: relative;
+      top: 0.2em;
+
+      margin-right: 0.2em;
+    }
+  }
+}
