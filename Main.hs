@@ -3,34 +3,30 @@
 import           Data.Monoid (mappend)
 import           Hakyll
 
-
 --------------------------------------------------------------------------------
 main :: IO ()
 main = hakyll $ do
-    match "images/*" $ do
-        route   idRoute
-        compile copyFileCompiler
 
-    match "css/*" $ do
-        route   idRoute
-        compile compressCssCompiler
+    -- meta <- getMetadata "posts/index.md"
 
-    match (fromList ["posts/index.md", "posts/me.md"]) $ do
-        route $ setExtension "html"
+    -- match (fromList ["posts/index.md", "posts/me.md"]) $ do
+    --     -- move the file to the root of the site
+    --     route $ gsubRoute "posts/" (const "") `composeRoutes` setExtension "html"
+    --     compile $ pandocCompiler
+    --         >>= loadAndApplyTemplate "templates/post.html"    postCtx
+    --         >>= saveSnapshot "content"
+    --         >>= loadAndApplyTemplate "templates/default.html" postCtx
+    --         >>= relativizeUrls
+
+    -- match posts that are not index.md
+    match "posts/*" $ do
+        route $ gsubRoute "posts/" (const "") `composeRoutes` setExtension "html"
         compile $ pandocCompiler
             >>= loadAndApplyTemplate "templates/post.html"    postCtx
             >>= saveSnapshot "content"
             >>= loadAndApplyTemplate "templates/default.html" postCtx
             >>= relativizeUrls
 
-    -- match "posts/*" $ do
-    --     route $ setExtension "html"
-    --     compile $ pandocCompiler
-    --         >>= loadAndApplyTemplate "templates/post.html"    postCtx
-    --         >>= saveSnapshot "content"
-    --         >>= loadAndApplyTemplate "templates/default.html" postCtx
-    --         >>= relativizeUrls
-    --
     -- create ["atom.xml"] $ do
     --     route idRoute
     --     compile $ do
@@ -50,29 +46,37 @@ main = hakyll $ do
     --         posts <- fmap (take 10) . recentFirst =<<
     --             loadAllSnapshots "posts/*" "content"
     --         renderRss myFeedConfiguration feedCtx posts
-    --
-    -- create ["archive.html"] $ do
-    --     route idRoute
-    --     compile $ do
-    --         posts <- recentFirst =<< loadAll "posts/*"
-    --         let archiveCtx =
-    --                 listField "posts" postCtx (return posts) `mappend`
-    --                 constField "title" "Archives"            `mappend`
-    --                 defaultContext
-    --
-    --         makeItem ""
-    --             >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
-    --             >>= loadAndApplyTemplate "templates/default.html" archiveCtx
-    --             >>= relativizeUrls
+
+    create ["archive.html"] $ do
+        route idRoute
+        compile $ do
+            posts <- recentFirst =<< loadAll "posts/*"
+            let archiveCtx =
+                    listField "posts" postCtx (return posts) `mappend`
+                    constField "title" "Archives"            `mappend`
+                    defaultContext
+
+            makeItem ""
+                >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
+                >>= loadAndApplyTemplate "templates/default.html" archiveCtx
+                >>= relativizeUrls
 
     match "templates/*" $ compile templateBodyCompiler
 
+    match "images/*" $ do
+        route   idRoute
+        compile copyFileCompiler
+
+    match "css/*" $ do
+        route   idRoute
+        compile compressCssCompiler
 
 --------------------------------------------------------------------------------
 
 postCtx :: Context String
 postCtx =
-    dateField "created" "%Y-%m-%d" `mappend`
+    dateField "created" "%F" <>
+    dateField "modified" "%F" <>
     defaultContext
 
 myFeedConfiguration :: FeedConfiguration
