@@ -20,8 +20,9 @@ New blog will be up before the end of 2024.
 
 
 2024:
-March: Basic Prototype of site running
-April: Finish Styling
-May: Improve usability (see gwern.net sidenotes etc)
-June: Add embeddings, semantic search, etc.
-July: Publications as HTML 
+
+- March: Basic Prototype of site running
+- April: Finish Styling
+- May: Improve usability (see gwern.net sidenotes etc)
+- June: Add embeddings, semantic search, etc.
+- July: Publications as HTML 
