@@ -1,11 +1,37 @@
 <article>
-    <section class="header">
-        Posted on $created$, modified on $modified$.
-        $if(author)$
-            by $author$
-        $endif$
-    </section>
-    <section>
-        $body$
-    </section>
+  <section class="header">
+    Posted on $created$, modified on $modified$. $if(author)$ by $author$
+    $endif$
+  </section>
+  <section>
+    <div class="container container--$type$">
+      <h1 class="blog-title">$title$</h1>
+
+      <!-- metadata -->
+
+      <div class="section-block section-block--description">
+        <p class="blog-description">$description$</p>
+      </div>
+      <div class="c-meta">
+        <div class="c-meta__item">
+          <span class="c-meta__item--created">$created$</span>
+          <span class="c-meta__item--timeseparator">―</span>
+          <span class="c-meta__item--modified">$modified$</span>
+        </div>
+        <div class="c-meta__item c-meta__item--status">
+          <span>$status$</span>
+        </div>
+        <div class="c-meta__item c-meta__item--importance">
+          <span>Importance:</span>
+          <span>$importance$</span>
+        </div>
+        <div class="c-meta__item c-meta__item--certainty">
+          <span>Certainty:</span>
+          <span>$certainty$</span>
+        </div>
+      </div>
+
+      $body$
+    </div>
+  </section>
 </article>
