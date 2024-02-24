@@ -152,17 +152,71 @@ h2 {
   }
 
   &__draft {
-      // diagonal banner on top right of page, with "draft" written in it
-        position: absolute;
-        top: 5em;
-        right: -5em;
-        background-color: red;
-        color: $background-secondary;
-        padding: 0.5em;
-        transform: rotate(45deg);
-        width: 20em;
-        text-align: center;
-
+    // diagonal banner on top right of page, with "draft" written in it
+    position: absolute;
+    top: 5em;
+    right: -5em;
+    background-color: red;
+    color: $background-secondary;
+    padding: 0.5em;
+    transform: rotate(45deg);
+    width: 20em;
+    text-align: center;
   }
 }
 
+.root {
+  width: 100%;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-height: 100vh;
+
+  font-family: "serif";
+  font-size: 18px;
+  line-height: 1.5;
+  color: $main;
+  background-color: $background;
+  overflow-x: hidden;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.2;
+  text-align: right;
+}
+
+.blog-title {
+  // small caps
+  font-variant: small-caps;
+  color: cornflowerblue;
+}
+
+a {
+  color: $main;
+  font-style: italic;
+
+  // dashed underline default
+  // background-image:
+  text-decoration: underline;
+
+  //text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// links that start with # are not underlined
+a[href^="#"] {
+  border-width: 1px;
+  border-style: dotted;
+  border-right: 0em;
+  border-top: 0em;
+  border-color: $main;
+  padding: 0em 0.2em 0em 0.3em;
+  // no underline
+  text-decoration: none;
+}
