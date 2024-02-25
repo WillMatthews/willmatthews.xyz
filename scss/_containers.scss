@@ -221,3 +221,8 @@ a[href^="#"] {
   // no underline
   text-decoration: none;
 }
+
+.suggested-listening {
+  font-style: italic;
+  color: $secondary;
+}
