@@ -65,6 +65,15 @@ main = hakyll $ do
         >>= loadAndApplyTemplate "templates/default.html" archiveCtx
         >>= relativizeUrls
 
+  create ["404.html"] $ do
+    route idRoute
+    compile $ do
+      let notFoundCtx = constField "title" "404" `mappend` defaultContext
+      makeItem ""
+        >>= loadAndApplyTemplate "templates/404.html" notFoundCtx
+        >>= loadAndApplyTemplate "templates/default.html" notFoundCtx
+        >>= relativizeUrls
+
   match "templates/*" $ compile templateBodyCompiler
 
   match "images/*" $ do
