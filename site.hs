@@ -4,6 +4,7 @@
 import Data.Monoid (mappend)
 import Hakyll
 import Hakyll.Web.Sass (sassCompiler)
+-- import Hakyll.Typescript.TS (compressJtsCompiler)
 
 --------------------------------------------------------------------------------
 main :: IO ()
@@ -20,7 +21,8 @@ main = hakyll $ do
   --         >>= relativizeUrls
 
   -- match posts that are not index.md
-  match "posts/*" $ do
+  -- if the file is named "README.md", ignore it, otherwise process it
+  match (fromGlob "posts/*.md" .&&. complement "posts/README.md") $ do
     route $ gsubRoute "posts/" (const "") `composeRoutes` setExtension "html"
     compile $
       pandocCompiler
@@ -73,6 +75,10 @@ main = hakyll $ do
     route $ gsubRoute "scss/" (const "css/") `composeRoutes` setExtension "css"
     compile $ sassCompiler
       >>= return . fmap compressCss
+
+  -- match "typescript/**" $ do
+  --   route $ setExtension "js"
+  --   compile compressJtsCompiler
 
 --------------------------------------------------------------------------------
 
