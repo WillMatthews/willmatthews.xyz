@@ -21,7 +21,7 @@
 
   text-align: justify;
 
-  max-width: 88ch;
+  max-width: 40rem;
 
   &--scientific {
     font-family: "Cardo";
@@ -165,8 +165,9 @@ h2 {
   }
 }
 
-.root {
+main {
   width: 100%;
+  margin: 0 auto;
 }
 
 body {
