@@ -39,6 +39,11 @@
   // make $white-star the bullet point for the list
   // be SURE to make it large
 
+  ul {
+    padding: 0;
+    margin: 1.1em 0em 1em 1em;
+  }
+
   li {
     // set backround image of bullet point to $white-star
 
