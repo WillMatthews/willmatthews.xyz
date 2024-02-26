@@ -1,0 +1,65 @@
+.publication-list {
+  // bullet pointed list. Clear as possible, as each bullet point is a long title.
+  list-style-type: number;
+
+  ul {
+    padding: 0;
+    margin: 0;
+  }
+
+  li {
+    margin: 0.5em 0;
+    padding: 0.5em;
+    border-style: solid;
+    border-width: 1px;
+    border-color: $tertiary;
+
+    box-shadow: inset 0 0 10px $tertiary;
+
+    &:hover {
+      border-color: $main;
+      box-shadow: inset 0 0 10px $main;
+    }
+    // the number must be inside the border
+    list-style-position: inside;
+    list-style-type: decimal-leading-zero;
+  }
+}
+
+.skinny-columns {
+  // up to 3 columns per row (wide-screen) and 1 column per row (mobile)
+  display: grid;
+
+  // first column is 1fr wide, second column is 2fr wide
+  grid-template-columns: 0.5fr 2fr;
+
+  // centre the grid
+  justify-content: center;
+
+  // make $white-star the bullet point for the list
+  // be SURE to make it large
+
+  li {
+    // set backround image of bullet point to $white-star
+
+    list-style-type: none;
+    line-height: 1.8;
+
+    &::before {
+      content: "";
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      background-image: $star;
+      background-size: contain;
+      background-repeat: no-repeat;
+      margin-right: 0.5em;
+      vertical-align: middle;
+    }
+  }
+}
+
+.right-align {
+  text-align: right;
+  float: right;
+}
