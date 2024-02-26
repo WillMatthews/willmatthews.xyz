@@ -1,8 +1,10 @@
 --------------------------------------------------------------------------------
 {-# LANGUAGE OverloadedStrings #-}
-import           Data.Monoid (mappend)
-import           Hakyll
 
+import Data.Monoid (mappend)
+import Hakyll
+import Hakyll.Web.Sass (sassCompiler)
+-- import Hakyll.Typescript.TS (compressJtsCompiler)
 
 --------------------------------------------------------------------------------
 
@@ -15,93 +17,102 @@ import           Hakyll
 
 main :: IO ()
 main = hakyll $ do
-    match "images/*" $ do
-        route   idRoute
-        compile copyFileCompiler
+  -- meta <- getMetadata "posts/index.md"
 
-    match "css/*" $ do
-        route   idRoute
-        compile compressCssCompiler
+  -- match (fromList ["posts/index.md", "posts/me.md"]) $ do
+  --     -- move the file to the root of the site
+  --     route $ gsubRoute "posts/" (const "") `composeRoutes` setExtension "html"
+  --     compile $ pandocCompiler
+  --         >>= loadAndApplyTemplate "templates/post.html"    postCtx
+  --         >>= saveSnapshot "content"
+  --         >>= loadAndApplyTemplate "templates/default.html" postCtx
+  --         >>= relativizeUrls
 
-    match (fromList ["about.rst", "contact.markdown"]) $ do
-        route   $ setExtension "html"
-        compile $ pandocCompiler
-            >>= loadAndApplyTemplate "templates/default.html" defaultContext
-            >>= relativizeUrls
+  -- match posts that are not index.md
+  -- if the file is named "README.md", ignore it, otherwise process it
+  match (fromGlob "posts/*.md" .&&. complement "posts/README.md") $ do
+    route $ gsubRoute "posts/" (const "") `composeRoutes` setExtension "html"
+    compile $
+      pandocCompiler
+        >>= loadAndApplyTemplate "templates/post.html" postCtx
+        >>= saveSnapshot "content"
+        >>= loadAndApplyTemplate "templates/default.html" postCtx
+        >>= relativizeUrls
 
-    match "posts/*" $ do
-        route $ setExtension "html"
-        compile $ pandocCompiler
-            >>= loadAndApplyTemplate "templates/post.html"    postCtx
-            >>= saveSnapshot "content"
-            >>= loadAndApplyTemplate "templates/default.html" postCtx
-            >>= relativizeUrls
+  -- create ["atom.xml"] $ do
+  --     route idRoute
+  --     compile $ do
+  --         let feedCtx = postCtx `mappend`
+  --             constField "description" "This is the post description"
+  --
+  --         posts <- fmap (take 10) . recentFirst =<<
+  --              loadAllSnapshots "posts/*" "content"
+  --         renderAtom myFeedConfiguration feedCtx posts
+  --
+  -- create ["index.xml"] $ do
+  --     route idRoute
+  --     compile $ do
+  --         let feedCtx = postCtx `mappend`
+  --             constField "description" "This is the post description"
+  --
+  --         posts <- fmap (take 10) . recentFirst =<<
+  --             loadAllSnapshots "posts/*" "content"
+  --         renderRss myFeedConfiguration feedCtx posts
 
-    create ["atom.xml"] $ do
-        route idRoute
-        compile $ do
-            let feedCtx = postCtx `mappend`
-                constField "description" "This is the post description"
+  create ["archive.html"] $ do
+    route idRoute
+    compile $ do
+      posts <- recentFirst =<< loadAll "posts/*"
+      let archiveCtx =
+            listField "posts" postCtx (return posts)
+              `mappend` constField "title" "Archives"
+              `mappend` defaultContext
 
-            posts <- fmap (take 10) . recentFirst =<<
-                 loadAllSnapshots "posts/*" "content"
-            renderAtom myFeedConfiguration feedCtx posts
+      makeItem ""
+        >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
+        >>= loadAndApplyTemplate "templates/default.html" archiveCtx
+        >>= relativizeUrls
 
-    create ["index.xml"] $ do
-        route idRoute
-        compile $ do
-            let feedCtx = postCtx `mappend`
-                constField "description" "This is the post description"
+  create ["404.html"] $ do
+    route idRoute
+    compile $ do
+      let notFoundCtx = constField "title" "404" `mappend` defaultContext
+      makeItem ""
+        >>= loadAndApplyTemplate "templates/404.html" notFoundCtx
+        >>= loadAndApplyTemplate "templates/default.html" notFoundCtx
+        >>= relativizeUrls
 
-            posts <- fmap (take 10) . recentFirst =<<
-                loadAllSnapshots "posts/*" "content"
-            renderRss myFeedConfiguration feedCtx posts
+  match "templates/*" $ compile templateBodyCompiler
 
-    create ["archive.html"] $ do
-        route idRoute
-        compile $ do
-            posts <- recentFirst =<< loadAll "posts/*"
-            let archiveCtx =
-                    listField "posts" postCtx (return posts) `mappend`
-                    constField "title" "Archives"            `mappend`
-                    defaultContext
+  match "images/*" $ do
+    route idRoute
+    compile copyFileCompiler
 
-            makeItem ""
-                >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
-                >>= loadAndApplyTemplate "templates/default.html" archiveCtx
-                >>= relativizeUrls
+  match "scss/main.scss" $ do
+    route $ gsubRoute "scss/" (const "css/") `composeRoutes` setExtension "css"
+    compile $ sassCompiler
+      >>= return . fmap compressCss
 
-
-    match "index.html" $ do
-        route idRoute
-        compile $ do
-            posts <- recentFirst =<< loadAll "posts/*"
-            let indexCtx =
-                    listField "posts" postCtx (return posts) `mappend`
-                    defaultContext
-
-            getResourceBody
-                >>= applyAsTemplate indexCtx
-                >>= loadAndApplyTemplate "templates/default.html" indexCtx
-                >>= relativizeUrls
-
-    match "templates/*" $ compile templateBodyCompiler
-
+  -- match "typescript/**" $ do
+  --   route $ setExtension "js"
+  --   compile compressJtsCompiler
 
 --------------------------------------------------------------------------------
+
 postCtx :: Context String
 postCtx =
-    dateField "date" "%B %e, %Y" `mappend`
-    defaultContext
-
+  dateField "created" "%F"
+    <> dateField "modified" "%F"
+    <> defaultContext
 
 myFeedConfiguration :: FeedConfiguration
-myFeedConfiguration = FeedConfiguration
-    { feedTitle       = "William Matthews - EE, ML, SW"
-    , feedDescription = "This feed provides William Matthews' website."
-    , feedAuthorName  = "William Matthews"
-    , feedAuthorEmail = "test@example.com"
-    , feedRoot        = "http://willmatthews.xyz"
+myFeedConfiguration =
+  FeedConfiguration
+    { feedTitle = "William Matthews - EE, ML, SW",
+      feedDescription = "This feed provides William Matthews' website.",
+      feedAuthorName = "William Matthews",
+      feedAuthorEmail = "test@example.com",
+      feedRoot = "http://willmatthews.xyz"
     }
 
 -- type Snapshot = String

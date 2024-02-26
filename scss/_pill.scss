@@ -1,0 +1,27 @@
+.pill {
+  display: inline-block;
+  border-radius: 0.6rem;
+  font-size: 0.85rem;
+  margin: 0.2rem;
+  padding: 0.4rem 0.6rem;
+
+  &--info {
+    background-color: transparentize($pill-info, 0.8);
+    color: $pill-info;
+  }
+
+  &--success {
+    background-color: transparentize($pill-success, 0.8);
+    color: $pill-success;
+  }
+
+  &--warning {
+    background-color: transparentize($pill-warning, 0.8);
+    color: $pill-warning;
+  }
+
+  &--danger {
+    background-color: transparentize($pill-danger, 0.8);
+    color: $pill-danger;
+  }
+}

@@ -1,0 +1,90 @@
+.upperstart {
+  display: inline-block;
+  font-variant: normal;
+
+  &::first-line {
+    font-synthesis: small-caps;
+    font-variant: small-caps;
+  }
+}
+
+.dropcap {
+  display: inline-block;
+  font-size: 5em;
+  line-height: 0.8em;
+  font-family: "Cardo";
+  font-weight: 700;
+  margin: 0.1em 0.1em 0 0;
+  // drop the letter down, so the top of the letter is at the top of the line
+  vertical-align: top;
+}
+
+.suggested-listening {
+  font-style: italic;
+  color: $secondary;
+}
+
+main {
+  width: 100%;
+  margin: 0 auto;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-height: 100vh;
+
+  font-family: "serif";
+  font-size: 18px;
+  line-height: 1.5;
+  color: $main;
+  background-color: $background;
+  overflow-x: hidden;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.2;
+  text-align: right;
+}
+
+h2 {
+  font-size: 2em;
+  font-weight: 700;
+  margin: 0;
+  color: $main;
+  font-weight: 700;
+}
+
+.blog-title {
+  // small caps
+  //font-variant: small-caps;
+  color: $tertiary;
+}
+
+a {
+  color: $main;
+  font-style: italic;
+
+  // dashed underline default
+  // background-image:
+  text-decoration: underline;
+
+  //text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// links that start with # are not underlined
+a[href^="#"] {
+  border-width: 1px;
+  border-style: dotted;
+  border-right: 0em;
+  border-top: 0em;
+  border-color: $main;
+  padding: 0em 0.2em 0em 0.3em;
+  // no underline
+  text-decoration: none;
+}

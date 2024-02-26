@@ -1,0 +1,50 @@
+.callout {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+
+  margin: 2em 0;
+
+  &--icon {
+    // icon is placed in the top right corner pf the callout
+    margin-left: auto;
+    margin-top: -2rem;
+
+    // filler: make icon a square
+    width: 2rem;
+    height: 2rem;
+
+    // filler: make icon a circle
+    border-radius: 50%;
+
+    // filler: make icon white
+    background-color: #fff;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  &-info {
+    background-color: transparentize($pill-info, 0.8);
+    color: $pill-info;
+  }
+
+  &-success {
+    background-color: transparentize($pill-success, 0.8);
+    color: $pill-success;
+  }
+
+  &-warning {
+    background-color: transparentize($pill-warning, 0.8);
+    color: $pill-warning;
+  }
+
+  &-danger {
+    background-color: transparentize($pill-danger, 0.8);
+    color: $pill-danger;
+  }
+}
