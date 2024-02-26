@@ -1,7 +1,6 @@
 --------------------------------------------------------------------------------
 {-# LANGUAGE OverloadedStrings #-}
 
-import Data.Monoid (mappend)
 import Hakyll
 import Hakyll.Web.Sass (sassCompiler)
 -- import Hakyll.Typescript.TS (compressJtsCompiler)
@@ -42,8 +41,8 @@ main = hakyll $ do
   create ["atom.xml"] $ do
       route idRoute
       compile $ do
-          let feedCtx = postCtx `mappend`
-              constField "description" "This is the post description"
+          let feedCtx = postCtx <>
+                    constField "description" "This is the post description"
 
           posts <- fmap (take 10) . recentFirst =<<
                loadAllSnapshots "posts/*" "content"
@@ -52,8 +51,8 @@ main = hakyll $ do
   create ["index.xml"] $ do
       route idRoute
       compile $ do
-          let feedCtx = postCtx `mappend`
-              constField "description" "This is the post description"
+          let feedCtx = postCtx <>
+                    constField "description" "This is the post description"
 
           posts <- fmap (take 10) . recentFirst =<<
               loadAllSnapshots "posts/*" "content"
@@ -64,9 +63,9 @@ main = hakyll $ do
     compile $ do
       posts <- recentFirst =<< loadAll "posts/*"
       let archiveCtx =
-            listField "posts" postCtx (return posts)
-              `mappend` constField "title" "Archives"
-              `mappend` defaultContext
+            listField "posts" postCtx (return posts) <>
+              constField "title" "Archives" <>
+              defaultContext
 
       makeItem ""
         >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
@@ -76,7 +75,7 @@ main = hakyll $ do
   create ["404.html"] $ do
     route idRoute
     compile $ do
-      let notFoundCtx = constField "title" "404" `mappend` defaultContext
+      let notFoundCtx = constField "title" "404" <> defaultContext
       makeItem ""
         >>= loadAndApplyTemplate "templates/404.html" notFoundCtx
         >>= loadAndApplyTemplate "templates/default.html" notFoundCtx
@@ -99,11 +98,22 @@ main = hakyll $ do
 
 --------------------------------------------------------------------------------
 
+
+-- "created" and "modified" are metadata fields in the markdown file
+-- They have the format "YYYY-MM-DD"
+--
+-- Example:
+-- created: 2018-01-19T16:50:20Z
+-- modified: 2024-02-22
+--
+-- The dateField function formats the date to a human-
 postCtx :: Context String
 postCtx =
-  dateField "created" "%F"
-    <> dateField "modified" "%F"
-    <> defaultContext
+  dateField "created" "%B %e, %Y" <>
+    dateField "modified" "%B %e, %Y" <>
+    modificationTimeField "modified" "%B %e, %Y" <>
+    defaultContext
+
 
 myFeedConfiguration :: FeedConfiguration
 myFeedConfiguration =
