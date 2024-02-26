@@ -39,25 +39,25 @@ main = hakyll $ do
         >>= loadAndApplyTemplate "templates/default.html" postCtx
         >>= relativizeUrls
 
-  -- create ["atom.xml"] $ do
-  --     route idRoute
-  --     compile $ do
-  --         let feedCtx = postCtx `mappend`
-  --             constField "description" "This is the post description"
-  --
-  --         posts <- fmap (take 10) . recentFirst =<<
-  --              loadAllSnapshots "posts/*" "content"
-  --         renderAtom myFeedConfiguration feedCtx posts
-  --
-  -- create ["index.xml"] $ do
-  --     route idRoute
-  --     compile $ do
-  --         let feedCtx = postCtx `mappend`
-  --             constField "description" "This is the post description"
-  --
-  --         posts <- fmap (take 10) . recentFirst =<<
-  --             loadAllSnapshots "posts/*" "content"
-  --         renderRss myFeedConfiguration feedCtx posts
+  create ["atom.xml"] $ do
+      route idRoute
+      compile $ do
+          let feedCtx = postCtx `mappend`
+              constField "description" "This is the post description"
+
+          posts <- fmap (take 10) . recentFirst =<<
+               loadAllSnapshots "posts/*" "content"
+          renderAtom myFeedConfiguration feedCtx posts
+
+  create ["index.xml"] $ do
+      route idRoute
+      compile $ do
+          let feedCtx = postCtx `mappend`
+              constField "description" "This is the post description"
+
+          posts <- fmap (take 10) . recentFirst =<<
+              loadAllSnapshots "posts/*" "content"
+          renderRss myFeedConfiguration feedCtx posts
 
   create ["archive.html"] $ do
     route idRoute
