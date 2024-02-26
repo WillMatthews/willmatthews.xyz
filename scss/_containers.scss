@@ -5,13 +5,6 @@
   width: 100%;
   min-height: calc(100vh - 36rem);
   // first line of text on page is in bold, in the first paragraph.
-
-  p:first-of-type {
-    &:first-line {
-      //capitalize
-      text-transform: uppercase;
-    }
-  }
 }
 
 .container {
@@ -225,4 +218,56 @@ a[href^="#"] {
 .suggested-listening {
   font-style: italic;
   color: $secondary;
+}
+
+.skinny-columns {
+  // up to 3 columns per row (wide-screen) and 1 column per row (mobile)
+  display: grid;
+
+  // first column is 1fr wide, second column is 2fr wide
+  grid-template-columns: 0.5fr 2fr;
+
+  // centre the grid
+  justify-content: center;
+}
+
+.right-align {
+  text-align: right;
+  float: right;
+}
+
+.publication-list {
+  // bullet pointed list. Clear as possible, as each bullet point is a long title.
+  list-style-type: number;
+
+  ul {
+    padding: 0;
+    margin: 0;
+  }
+
+  li {
+    margin: 0.5em 0;
+    padding: 0.5em;
+    border-style: solid;
+    border-width: 1px;
+    border-color: cornflowerblue;
+
+    box-shadow: inset 0 0 10px cornflowerblue;
+
+    // the number must be inside the border
+    list-style-type: decimal;
+
+    // the number must be inside the border
+    list-style-position: inside;
+  }
+}
+
+.upperstart {
+  display: inline-block;
+  font-variant: normal;
+
+  &::first-line {
+    font-synthesis: small-caps;
+    font-variant: small-caps;
+  }
 }
