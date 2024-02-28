@@ -1,21 +1,12 @@
 {-# LANGUAGE OverloadedStrings #-}
 
--- import Hakyll.Typescript.TS (compressJtsCompiler)
-
 import Control.Monad (filterM)
-import Data.Time.Format (defaultTimeLocale, parseTimeM)
 import Hakyll
---import getUnderlying (it is not exported from Hakyll.Web.Page)
-import Hakyll.Core.Compiler (getUnderlying)
 import Hakyll.Web.Sass (sassCompiler)
 
---------------------------------------------------------------------------------
+-- import Hakyll.Typescript.TS (compressJtsCompiler)
 
-{-
- - Hakyll file for building willmatthews.xyz
- - Author: WillMatthews
- - Date: 2024-02-21
--}
+--------------------------------------------------------------------------------
 
 main :: IO ()
 main = hakyll $ do
@@ -33,10 +24,12 @@ main = hakyll $ do
         >>= loadAndApplyTemplate "templates/default.html" postCtx
         >>= relativizeUrls
 
-  -- Does not work! Does not do anything! Why??
+  -- Does not work! Does not do anything! Why???
+  -- Goal: Copy the post.md to a new file called post.page
   match postPattern $ do
     route $ gsubRoute "posts/" (const "") `composeRoutes` setExtension "page"
-    compile copyFileCompiler
+    compile $ do
+      copyFileCompiler
 
   create ["atom.xml"] $ do
     route idRoute
@@ -109,13 +102,6 @@ main = hakyll $ do
 
 --------------------------------------------------------------------------------
 
--- | Context for posts
--- Posts have a created date, and a modified date
--- These are named in the front matter of the markdown file as "created" and "modified"
--- Hakyll has a dateField function that can be used to format the date but it
--- requires a 'published' field. This is a workaround to use the 'created' field
--- as the published date. using dateField "created" "%B %e, %Y" does not work, and
--- I don't know why.
 postCtx :: Context String
 postCtx =
   dateField "created" "%B %e, %Y"
@@ -134,7 +120,7 @@ myFeedConfiguration :: FeedConfiguration
 myFeedConfiguration =
   FeedConfiguration
     { feedTitle = "William Matthews - EE, ML, SW",
-      feedDescription = "This feed provides William Matthews' website.",
+      feedDescription = "This if the feed for willmatthews.xyz, the personal website of William Matthews. Contains posts about electrical engineering, machine learning, and software.",
       feedAuthorName = "William Matthews",
       feedAuthorEmail = "test@example.com",
       feedRoot = "http://willmatthews.xyz"
