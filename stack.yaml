@@ -9,6 +9,7 @@ extra-deps:
   - hakyll-sass-0.2.4
   #- hakyll-typescript-0.0.2.0
   - time-1.9.3
+  - containers-0.6.2.1
 
 compiler: ghc-8.10.4
 compiler-check: newer-minor

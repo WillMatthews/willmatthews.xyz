@@ -1,11 +1,14 @@
---------------------------------------------------------------------------------
 {-# LANGUAGE OverloadedStrings #-}
 
-import Hakyll
-import Hakyll.Web.Sass (sassCompiler)
 -- import Hakyll.Typescript.TS (compressJtsCompiler)
 
-import DateFormat
+import Control.Monad (filterM)
+import Data.Time.Format (defaultTimeLocale, parseTimeM)
+import Hakyll
+--import getUnderlying (it is not exported from Hakyll.Web.Page)
+import Hakyll.Core.Compiler (getUnderlying)
+import Hakyll.Web.Sass (sassCompiler)
+
 --------------------------------------------------------------------------------
 
 {-
@@ -14,21 +17,10 @@ import DateFormat
  - Date: 2024-02-21
 -}
 
-
 main :: IO ()
 main = hakyll $ do
-  -- meta <- getMetadata "posts/index.md"
-
-  -- match (fromList ["posts/index.md", "posts/me.md"]) $ do
-  --     -- move the file to the root of the site
-  --     route $ gsubRoute "posts/" (const "") `composeRoutes` setExtension "html"
-  --     compile $ pandocCompiler
-  --         >>= loadAndApplyTemplate "templates/post.html"    postCtx
-  --         >>= saveSnapshot "content"
-  --         >>= loadAndApplyTemplate "templates/default.html" postCtx
-  --         >>= relativizeUrls
-
   let postPattern = fromGlob "posts/*.md" .&&. complement "posts/README.md"
+  let numRSSItems = 25
 
   -- match posts that are not index.md
   -- if the file is named "README.md", ignore it, otherwise process it
@@ -41,43 +33,54 @@ main = hakyll $ do
         >>= loadAndApplyTemplate "templates/default.html" postCtx
         >>= relativizeUrls
 
-  -- Does not work! Does not do anything!
-  -- match postPattern $ do
-  --   route $ gsubRoute "posts/" (const "") `composeRoutes` setExtension "page"
-  --   compile copyFileCompiler
+  -- Does not work! Does not do anything! Why??
+  match postPattern $ do
+    route $ gsubRoute "posts/" (const "") `composeRoutes` setExtension "page"
+    compile copyFileCompiler
 
-  -- create ["atom.xml"] $ do
-  --   route idRoute
-  --   compile $ do
-  --     let feedCtx = postCtx <>
-  --           constField "description" "This is the post description"
+  create ["atom.xml"] $ do
+    route idRoute
+    compile $ do
+      posts <-
+        recentFirst
+          =<< filterOutDrafts
+          =<< loadAllSnapshots "posts/*" "content"
 
-  --     posts <- fmap (take 10) . recentFirst =<<
-  --          loadAllSnapshots "posts/*" "content"
-  --     renderAtom myFeedConfiguration feedCtx posts
+      let feedCtx =
+            postCtx
+              <> constField "description" "This is the post description"
+      renderAtom myFeedConfiguration feedCtx (take numRSSItems posts)
 
-  -- create ["index.xml"] $ do
-  --     route idRoute
-  --     compile $ do
-  --         let feedCtx = postCtx <>
-  --                   constField "description" "This is the post description"
+  create ["index.xml"] $ do
+    route idRoute
 
-  --         posts <- fmap (take 10) . recentFirst =<<
-  --             loadAllSnapshots "posts/*" "content"
-  --         renderRss myFeedConfiguration feedCtx posts
+    compile $ do
+      posts <-
+        recentFirst
+          =<< filterOutDrafts
+          =<< loadAllSnapshots "posts/*" "content"
 
-  -- create ["archive.html"] $ do
-  --   route idRoute
-  --   compile $ do
-  --     posts <- recentFirst =<< loadAll "posts/*"
-  --     let archiveCtx =
-  --           listField "posts" postCtx (return posts) <>
-  --             constField "title" "Archives" <>
-  --             defaultContext
-  --     makeItem ""
-  --       >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
-  --       >>= loadAndApplyTemplate "templates/default.html" archiveCtx
-  --       >>= relativizeUrls
+      let feedCtx =
+            postCtx
+              <> constField "description" "This is the post description"
+      renderRss myFeedConfiguration feedCtx (take numRSSItems posts)
+
+  create ["archive.html"] $ do
+    route idRoute
+    compile $ do
+      posts <-
+        recentFirst
+          =<< filterOutDrafts
+          =<< loadAll "posts/*"
+
+      let archiveCtx =
+            listField "posts" postCtx (return posts)
+              <> constField "title" "Archives"
+              <> defaultContext
+      makeItem ""
+        >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
+        >>= loadAndApplyTemplate "templates/default.html" archiveCtx
+        >>= relativizeUrls
 
   create ["404.html"] $ do
     route idRoute
@@ -96,20 +99,36 @@ main = hakyll $ do
 
   match "scss/main.scss" $ do
     route $ gsubRoute "scss/" (const "css/") `composeRoutes` setExtension "css"
-    compile $ sassCompiler
-      >>= return . fmap compressCss
+    compile $
+      sassCompiler
+        >>= return . fmap compressCss
 
-  -- match "typescript/**" $ do
-  --   route $ setExtension "js"
-  --   compile compressJtsCompiler
+-- match "typescript/**" $ do
+--   route $ setExtension "js"
+--   compile compressJtsCompiler
 
 --------------------------------------------------------------------------------
 
+-- | Context for posts
+-- Posts have a created date, and a modified date
+-- These are named in the front matter of the markdown file as "created" and "modified"
+-- Hakyll has a dateField function that can be used to format the date but it
+-- requires a 'published' field. This is a workaround to use the 'created' field
+-- as the published date. using dateField "created" "%B %e, %Y" does not work, and
+-- I don't know why.
 postCtx :: Context String
-postCtx = customDateField "published" "%B %e, %Y" "created" <>
-  customDateField "modified" "%B %e, %Y" "modified" <>
-  defaultContext
+postCtx =
+  dateField "created" "%B %e, %Y"
+    <> defaultContext
 
+filterOutDrafts :: MonadMetadata m => [Item a] -> m [Item a]
+filterOutDrafts = filterM isPublished
+  where
+    isPublished item = do
+      metadata <- getMetadata (itemIdentifier item)
+      return $ case lookupString "draft" metadata of
+        Just "true" -> False
+        _ -> True
 
 myFeedConfiguration :: FeedConfiguration
 myFeedConfiguration =
