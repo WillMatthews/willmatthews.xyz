@@ -8,6 +8,7 @@ extra-deps:
   - hakyll-4.15.1.1
   - hakyll-sass-0.2.4
   #- hakyll-typescript-0.0.2.0
+  - time-1.9.3
 
 compiler: ghc-8.10.4
 compiler-check: newer-minor

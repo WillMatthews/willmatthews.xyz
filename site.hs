@@ -1,12 +1,11 @@
 --------------------------------------------------------------------------------
 {-# LANGUAGE OverloadedStrings #-}
 
-import Control.Monad (forM_)
 import Hakyll
 import Hakyll.Web.Sass (sassCompiler)
 -- import Hakyll.Typescript.TS (compressJtsCompiler)
-import Control.Monad.IO.Class (liftIO)
-import Control.Monad (forM_)
+
+import DateFormat
 --------------------------------------------------------------------------------
 
 {-
@@ -47,39 +46,38 @@ main = hakyll $ do
   --   route $ gsubRoute "posts/" (const "") `composeRoutes` setExtension "page"
   --   compile copyFileCompiler
 
-  create ["atom.xml"] $ do
-    route idRoute
-    compile $ do
-      let feedCtx = postCtx <>
-            constField "description" "This is the post description"
+  -- create ["atom.xml"] $ do
+  --   route idRoute
+  --   compile $ do
+  --     let feedCtx = postCtx <>
+  --           constField "description" "This is the post description"
 
-      posts <- fmap (take 10) . recentFirst =<<
-           loadAllSnapshots "posts/*" "content"
-      renderAtom myFeedConfiguration feedCtx posts
+  --     posts <- fmap (take 10) . recentFirst =<<
+  --          loadAllSnapshots "posts/*" "content"
+  --     renderAtom myFeedConfiguration feedCtx posts
 
-  create ["index.xml"] $ do
-      route idRoute
-      compile $ do
-          let feedCtx = postCtx <>
-                    constField "description" "This is the post description"
+  -- create ["index.xml"] $ do
+  --     route idRoute
+  --     compile $ do
+  --         let feedCtx = postCtx <>
+  --                   constField "description" "This is the post description"
 
-          posts <- fmap (take 10) . recentFirst =<<
-              loadAllSnapshots "posts/*" "content"
-          renderRss myFeedConfiguration feedCtx posts
+  --         posts <- fmap (take 10) . recentFirst =<<
+  --             loadAllSnapshots "posts/*" "content"
+  --         renderRss myFeedConfiguration feedCtx posts
 
-  create ["archive.html"] $ do
-    route idRoute
-    compile $ do
-      posts <- recentFirst =<< loadAll "posts/*"
-      let archiveCtx =
-            listField "posts" postCtx (return posts) <>
-              constField "title" "Archives" <>
-              defaultContext
-
-      makeItem ""
-        >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
-        >>= loadAndApplyTemplate "templates/default.html" archiveCtx
-        >>= relativizeUrls
+  -- create ["archive.html"] $ do
+  --   route idRoute
+  --   compile $ do
+  --     posts <- recentFirst =<< loadAll "posts/*"
+  --     let archiveCtx =
+  --           listField "posts" postCtx (return posts) <>
+  --             constField "title" "Archives" <>
+  --             defaultContext
+  --     makeItem ""
+  --       >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
+  --       >>= loadAndApplyTemplate "templates/default.html" archiveCtx
+  --       >>= relativizeUrls
 
   create ["404.html"] $ do
     route idRoute
@@ -107,19 +105,10 @@ main = hakyll $ do
 
 --------------------------------------------------------------------------------
 
-
--- "created" and "modified" are metadata fields in the markdown file
--- They have the format "YYYY-MM-DD"
---
--- Example:
--- created: 2018-01-19T16:50:20Z
--- modified: 2024-02-22
---
 postCtx :: Context String
-postCtx =
-  -- dateField "created" "%Y-%m-%d"
-  --   <> dateField "modified" "%Y-%m-%d"
-     defaultContext
+postCtx = customDateField "published" "%B %e, %Y" "created" <>
+  customDateField "modified" "%B %e, %Y" "modified" <>
+  defaultContext
 
 
 myFeedConfiguration :: FeedConfiguration
