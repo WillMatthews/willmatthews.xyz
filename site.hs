@@ -1,10 +1,12 @@
 --------------------------------------------------------------------------------
 {-# LANGUAGE OverloadedStrings #-}
 
+import Control.Monad (forM_)
 import Hakyll
 import Hakyll.Web.Sass (sassCompiler)
 -- import Hakyll.Typescript.TS (compressJtsCompiler)
-
+import Control.Monad.IO.Class (liftIO)
+import Control.Monad (forM_)
 --------------------------------------------------------------------------------
 
 {-
@@ -27,9 +29,11 @@ main = hakyll $ do
   --         >>= loadAndApplyTemplate "templates/default.html" postCtx
   --         >>= relativizeUrls
 
+  let postPattern = fromGlob "posts/*.md" .&&. complement "posts/README.md"
+
   -- match posts that are not index.md
   -- if the file is named "README.md", ignore it, otherwise process it
-  match (fromGlob "posts/*.md" .&&. complement "posts/README.md") $ do
+  match postPattern $ do
     route $ gsubRoute "posts/" (const "") `composeRoutes` setExtension "html"
     compile $
       pandocCompiler
@@ -38,15 +42,20 @@ main = hakyll $ do
         >>= loadAndApplyTemplate "templates/default.html" postCtx
         >>= relativizeUrls
 
-  create ["atom.xml"] $ do
-      route idRoute
-      compile $ do
-          let feedCtx = postCtx <>
-                    constField "description" "This is the post description"
+  -- Does not work! Does not do anything!
+  -- match postPattern $ do
+  --   route $ gsubRoute "posts/" (const "") `composeRoutes` setExtension "page"
+  --   compile copyFileCompiler
 
-          posts <- fmap (take 10) . recentFirst =<<
-               loadAllSnapshots "posts/*" "content"
-          renderAtom myFeedConfiguration feedCtx posts
+  create ["atom.xml"] $ do
+    route idRoute
+    compile $ do
+      let feedCtx = postCtx <>
+            constField "description" "This is the post description"
+
+      posts <- fmap (take 10) . recentFirst =<<
+           loadAllSnapshots "posts/*" "content"
+      renderAtom myFeedConfiguration feedCtx posts
 
   create ["index.xml"] $ do
       route idRoute
@@ -106,13 +115,11 @@ main = hakyll $ do
 -- created: 2018-01-19T16:50:20Z
 -- modified: 2024-02-22
 --
--- The dateField function formats the date to a human-
 postCtx :: Context String
 postCtx =
-  dateField "created" "%B %e, %Y" <>
-    dateField "modified" "%B %e, %Y" <>
-    modificationTimeField "modified" "%B %e, %Y" <>
-    defaultContext
+  -- dateField "created" "%Y-%m-%d"
+  --   <> dateField "modified" "%Y-%m-%d"
+     defaultContext
 
 
 myFeedConfiguration :: FeedConfiguration
@@ -124,7 +131,3 @@ myFeedConfiguration =
       feedAuthorEmail = "test@example.com",
       feedRoot = "http://willmatthews.xyz"
     }
-
--- type Snapshot = String
--- saveSnapshot :: (Typeable a, Binary a)
---            => Snapshot -> Item a -> Compiler (Item a)
