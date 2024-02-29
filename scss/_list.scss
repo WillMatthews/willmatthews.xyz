@@ -37,7 +37,7 @@
   display: grid;
 
   // first column is 1fr wide, second column is 2fr wide
-  grid-template-columns: 0.5fr 2fr;
+  grid-template-columns: 1fr 2fr;
 
   // centre the grid
   justify-content: center;
@@ -65,7 +65,7 @@
       background-size: contain;
       background-repeat: no-repeat;
       margin-right: -1rem;
-      translate: -2rem 0;
+      translate: -2rem -0.15;
       vertical-align: middle;
     }
   }
