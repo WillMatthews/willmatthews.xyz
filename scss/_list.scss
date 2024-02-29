@@ -47,7 +47,7 @@
 
   ul {
     padding: 0;
-    margin: 1.1em 0em 1em 1em;
+    margin: 1.1rem 0em 1rem 3rem;
   }
 
   li {
@@ -59,12 +59,13 @@
     &::before {
       content: "";
       display: inline-block;
-      width: 1em;
-      height: 1em;
+      width: 1rem;
+      height: 1rem;
       background-image: $star;
       background-size: contain;
       background-repeat: no-repeat;
-      margin-right: 0.5em;
+      margin-right: -1rem;
+      translate: -2rem 0;
       vertical-align: middle;
     }
   }

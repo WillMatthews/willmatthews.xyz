@@ -1,7 +1,12 @@
 .c-meta {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
   align-items: center;
+  grid-auto-flow: column;
+
+  // when viewport is narrow, make the grid into a column
+  @media (max-width: 600px) {
+    grid-auto-flow: row;
+  }
 
   &__item {
     margin: 0 0.5em;
