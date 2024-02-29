@@ -3,7 +3,6 @@
   align-items: center;
   grid-auto-flow: column;
 
-  // when viewport is narrow, make the grid into a column
   @media (max-width: 600px) {
     grid-auto-flow: row;
   }
