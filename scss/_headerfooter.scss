@@ -32,20 +32,16 @@
     align-items: center;
     justify-content: center;
     padding: 0.5em;
-    //float: left;
 
-    // items are in a row, not vertically stacked.
-
-    &--image {
+    img {
       width: 50px;
       height: 30px;
       object-fit: contain;
-
-      // make background color a gradient
-      //background-color: $main;
-
-      // image is a SVG. Set stroke color to main color
       stroke: $main;
+      &:hover{
+        stroke: $tertiary;
+        filter: brightness(1.2);
+      }
     }
   }
 
@@ -121,7 +117,7 @@
 
     &__w {
       background-color: $main;
-      height: 5em;
+      height: 10em;
       color: $background;
       font-family: "Titillium Web";
     }
@@ -139,6 +135,18 @@
       top: 0.2em;
 
       margin-right: 0.2em;
+    }
+  }
+
+  &--logo {
+    img {
+      width: 2rem;
+      // stroke: $main;
+      &:hover {
+       stroke: $tertiary;
+       // lighten logo
+       filter: brightness(1.2);
+      }
     }
   }
 }
