@@ -1,5 +1,8 @@
 # willmatthews.xyz site infrastructure
 
+![Haskell Build Site](https://github.com/WillMatthews/willmatthews.xyz/actions/workflows/haskell.yml/badge.svg)
+![Version](https://img.shields.io/github/v/tag/WillMatthews/willmatthews.xyz?label=version)
+
 This is the infrastructure for my personal site, which is currently under construction.
 
 ## Building
