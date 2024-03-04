@@ -26,10 +26,9 @@ main = hakyll $ do
 
   -- Does not work! Does not do anything! Why???
   -- Goal: Copy the post.md to a new file called post.page
-  match postPattern $ do
-    route $ gsubRoute "posts/" (const "") `composeRoutes` setExtension "page"
-    compile $ do
-      copyFileCompiler
+  match "posts/images/*" $ do
+    route $ gsubRoute "posts/" (const "")
+    compile copyFileCompiler
 
   create ["atom.xml"] $ do
     route idRoute
