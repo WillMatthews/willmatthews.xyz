@@ -50,14 +50,13 @@ New blog will be up before the end of 2024.
 
 ## TODO
 
-- [ ] Typescript
-- [ ] Render LaTeX
-- [ ] Render code blocks
-- [ ] Semantic suggestions with embeddings
-- [ ] Search
-- [ ] RSS
-- [ ] Post list
-- [ ] Tag handling
+- Typescript
+- Render LaTeX inline functions
+- Semantic suggestions with embeddings
+- Search
+- RSS
+- Post list
+- Tag handling
 
 ## License
 
