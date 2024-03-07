@@ -1,0 +1,111 @@
+
+
+
+.sourceCode {
+    font-family: "IBM Plex Mono";
+    font-size: 0.7rem;
+    line-height: 1.0rem;
+    white-space: pre;
+    word-wrap: normal;
+    overflow: auto;
+    background-color: #123;
+    color: #dfff00;
+    margin: 1em 0;
+    border-width: 0.1em;
+    border-style: dotted;
+    border-color: #fff;
+
+    .default, .python, .txt, .sh, .bash, .shell, .zsh, .c, .cpp, .h, .hpp, .hxx, .matlab {
+        border-style: none;
+    }
+
+
+    a[href^="#"] {
+        color: $main;
+        border-style: solid;
+        margin: 1em;
+    }
+
+
+    // KeywordTok = kw
+    .kw {
+        color: orange;
+    }
+
+    // ControlFlowTok = cf
+    .cf {
+        color: aqua;
+    }
+
+    // OperatorTok = op
+    .op {
+        color: azure;
+    }
+
+    // BuiltInTok = bu
+    .bu {
+        color: fuchsia;
+    }
+
+    // VariableTok = va
+    .va {
+        color: coral;
+    }
+
+    // CommentTok = co
+    .co {
+        color: lightblue;
+    }
+
+    // ImportTok = im
+    .im {
+        color: ivory;
+    }
+
+    // DecValTok = dv
+    .dv {
+        color: chocolate;
+    }
+
+    // FloatTok = fl
+    .fl {
+        color: brown;
+    }
+
+    // StringTok = st
+    .st {
+        color: bisque;
+    }
+
+    // CharTok = ch
+    .ch {
+        color: chartreuse;
+    }
+
+    // SpecialStringTok = ss
+    .ss {
+        color: cyan;
+    }
+
+    // DataTypeTok = dt
+    // BaseNTok = bn
+    // OtherTok = ot
+    // AlertTok = al
+    // FunctionTok = fu
+    // RegionMarkerTok = re
+    // ErrorTok = er
+    // ConstantTok = cn
+    // SpecialCharTok = sc
+    // VerbatimStringTok = vs
+    // DocumentationTok = do
+    // AnnotationTok = an
+    // CommentVarTok = cv
+    // ExtensionTok = ex
+    // PreprocessorTok = pp
+    // AttributeTok = at
+    // InformationTok = in
+    // WarningTok = wa
+    // A NormalTok is not marked up at all.
+
+}
+
