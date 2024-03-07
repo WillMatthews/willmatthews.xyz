@@ -85,7 +85,9 @@ main = hakyll $ do
 
   match "templates/*" $ compile templateBodyCompiler
 
-  match "images/*" $ do
+  -- TODO: scaling of images wih https://hackage.haskell.org/package/hakyll-images-1.2.1/docs/Hakyll-Images-Resize.html
+  -- TODO: Dithering of images with https://hackage.haskell.org/package/hakyll-images-1.2.1/docs/Hakyll-Images-Dither.html
+  match "images/**" $ do
     route idRoute
     compile copyFileCompiler
 
@@ -103,7 +105,8 @@ main = hakyll $ do
 
 postCtx :: Context String
 postCtx =
-  dateField "created" "%B %e, %Y"
+  -- format as yyyy-mm-dd
+  dateField "date" "%Y-%m-%d"
     <> defaultContext
 
 filterOutDrafts :: MonadMetadata m => [Item a] -> m [Item a]
