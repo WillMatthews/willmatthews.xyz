@@ -26,7 +26,7 @@ main = hakyll $ do
 
   -- Does not work! Does not do anything! Why???
   -- Goal: Copy the post.md to a new file called post.page
-  match "posts/images/*" $ do
+  match "posts/images/**" $ do
     route $ gsubRoute "posts/" (const "")
     compile copyFileCompiler
 
@@ -86,7 +86,7 @@ main = hakyll $ do
   match "templates/*" $ compile templateBodyCompiler
 
   -- TODO: scaling of images wih https://hackage.haskell.org/package/hakyll-images-1.2.1/docs/Hakyll-Images-Resize.html
-  -- TODO: Dithering of images with https://hackage.haskell.org/package/hakyll-images-1.2.1/docs/Hakyll-Images-Dither.html
+  -- TODO: Dithering of images with Weighted Voronoi Stippling (https://www.cs.ubc.ca/labs/imager/tr/2002/secord2002b/secord.2002b.pdf)
   match "images/**" $ do
     route idRoute
     compile copyFileCompiler

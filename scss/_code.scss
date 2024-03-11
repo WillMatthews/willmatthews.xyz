@@ -1,6 +1,21 @@
 
+// inline or general
+code {
+    font-family: "IBM Plex Mono";
+    font-size: 0.9rem;
+    line-height: 1.0rem;
+    white-space: pre;
+    word-wrap: normal;
+    overflow: auto;
+    color: #fff;
+    margin: 1em 0;
+    border-width: 0.1em;
+    border-style: dotted;
+    border-color: #fff;
+    padding: 0.1rem 0.3rem;
+}
 
-
+// block
 .sourceCode {
     font-family: "IBM Plex Mono";
     font-size: 0.7rem;
@@ -14,11 +29,11 @@
     border-width: 0.1em;
     border-style: dotted;
     border-color: #fff;
+    padding: 0;
 
     .default, .python, .txt, .sh, .bash, .shell, .zsh, .c, .cpp, .h, .hpp, .hxx, .matlab {
         border-style: none;
     }
-
 
     a[href^="#"] {
         color: $main;
@@ -26,6 +41,7 @@
         margin: 1em;
     }
 
+    // Token markup for syntax highlighting (as defined in Pandoc token types)
 
     // KeywordTok = kw
     .kw {
@@ -86,6 +102,9 @@
     .ss {
         color: cyan;
     }
+
+
+    // TODO: Add the following token types when needed
 
     // DataTypeTok = dt
     // BaseNTok = bn
