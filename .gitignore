@@ -16,6 +16,7 @@ dist-newstyle/
 
 # Hakyll generated site directory
 _site/
+_cache/*
 
 # Temporary files
 *.swp
@@ -40,4 +41,4 @@ Thumbs.db
 *.sublime-workspace
 
 
-_cache/*
+notes
