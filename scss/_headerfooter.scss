@@ -5,29 +5,20 @@
   align-items: center;
   justify-content: first baseline;
   height: 30px;
-  //background-color: $background;
-
-  // make it glassy black with a vertical gradient
   background: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 1) 0%,
     rgba(0, 0, 0, 0) 90%
   );
 
-  // filter background to make it glassy
-  // make it glassy black
-  // make the blur amount a linear function of the distance from the top of the page
   backdrop-filter: blur(1px);
-
-  // permanently position at top of page
-  position: fixed;
+  position: fixed; // maybe not. This looks naff.
   top: 0;
   left: 0;
   right: 0;
   z-index: 1;
 
   &__logo {
-    // inline
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -58,14 +49,11 @@
   }
 
   &__nav {
-    // inline
     display: inline-flex;
     align-items: center;
     justify-content: center;
     padding: 0.5em;
-    //float: right;
 
-    // items are in a row, not vertically stacked.
     &__item {
       margin: 0 0.5em;
       color: $main;
@@ -126,11 +114,9 @@
     color: $background;
     font-family: "Titillium Web";
 
-    // copyright symbol
     &::before {
       content: "©";
       font-size: 1.5em;
-      // move down to align with text
       position: relative;
       top: 0.2em;
 
@@ -144,7 +130,6 @@
       // stroke: $main;
       &:hover {
        stroke: $tertiary;
-       // lighten logo
        filter: brightness(1.2);
       }
     }
