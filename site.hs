@@ -24,38 +24,12 @@ main = hakyll $ do
         >>= loadAndApplyTemplate "templates/default.html" postCtx
         >>= relativizeUrls
 
-  -- Does not work! Does not do anything! Why???
-  -- Goal: Copy the post.md to a new file called post.page
-  match "posts/images/**" $ do
-    route $ gsubRoute "posts/" (const "")
+  -- Goal: Copy the post.md to a new file called post.page.
+  -- This doesn't seem to work, is it due to the fact that the file is already
+  -- being processed by the pandocCompiler?
+  match postPattern $ do
+    route $ gsubRoute "posts/" (const "") `composeRoutes` setExtension "page"
     compile copyFileCompiler
-
-  create ["atom.xml"] $ do
-    route idRoute
-    compile $ do
-      posts <-
-        recentFirst
-          =<< filterOutDrafts
-          =<< loadAllSnapshots "posts/*" "content"
-
-      let feedCtx =
-            postCtx
-              <> constField "description" "This is the post description"
-      renderAtom myFeedConfiguration feedCtx (take numRSSItems posts)
-
-  create ["index.xml"] $ do
-    route idRoute
-
-    compile $ do
-      posts <-
-        recentFirst
-          =<< filterOutDrafts
-          =<< loadAllSnapshots "posts/*" "content"
-
-      let feedCtx =
-            postCtx
-              <> constField "description" "This is the post description"
-      renderRss myFeedConfiguration feedCtx (take numRSSItems posts)
 
   create ["archive.html"] $ do
     route idRoute
@@ -74,6 +48,23 @@ main = hakyll $ do
         >>= loadAndApplyTemplate "templates/default.html" archiveCtx
         >>= relativizeUrls
 
+  -- create ["recent.html"] $ do
+  --   route idRoute
+  --   compile $ do
+  --     posts <-
+  --       recentFirst
+  --         =<< filterOutDrafts
+  --         =<< loadAll "posts/*"
+  --
+  --     let recentCtx =
+  --           listField "posts" postCtx (return posts)
+  --             <> constField "title" "Recent Posts"
+  --             <> defaultContext
+  --     makeItem ""
+  --       >>= loadAndApplyTemplate "templates/recent.html" recentCtx
+  --       >>= loadAndApplyTemplate "templates/default.html" recentCtx
+  --       >>= relativizeUrls
+
   create ["404.html"] $ do
     route idRoute
     compile $ do
@@ -91,6 +82,10 @@ main = hakyll $ do
     route idRoute
     compile copyFileCompiler
 
+  match "posts/images/**" $ do
+    route $ gsubRoute "posts/" (const "")
+    compile copyFileCompiler
+
   match "scss/main.scss" $ do
     route $ gsubRoute "scss/" (const "css/") `composeRoutes` setExtension "css"
     compile $
@@ -100,6 +95,33 @@ main = hakyll $ do
 -- match "typescript/**" $ do
 --   route $ setExtension "js"
 --   compile compressJtsCompiler
+
+  -- RSS and Atom feeds
+  create ["atom.xml"] $ do
+    route idRoute
+    compile $ do
+      posts <-
+        recentFirst
+          =<< filterOutDrafts
+          =<< loadAllSnapshots "posts/*" "content"
+
+      let feedCtx =
+            postCtx
+              <> constField "description" "This is the post description"
+      renderAtom myFeedConfiguration feedCtx (take numRSSItems posts)
+
+  create ["index.xml"] $ do
+    route idRoute
+    compile $ do
+      posts <-
+        recentFirst
+          =<< filterOutDrafts
+          =<< loadAllSnapshots "posts/*" "content"
+
+      let feedCtx =
+            postCtx
+              <> constField "description" "This is the post description"
+      renderRss myFeedConfiguration feedCtx (take numRSSItems posts)
 
 --------------------------------------------------------------------------------
 

@@ -1,0 +1,14 @@
+img {
+  max-width: 100%;
+  height: auto;
+  filter: invert(93.8%) sepia(0%) saturate(150%);
+
+  &:hover {
+    filter: invert(0%) sepia(0%) saturate(100%);
+  }
+
+  &.no-invert {
+    filter: none;
+  }
+}
+
