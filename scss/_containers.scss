@@ -117,6 +117,24 @@
 }
 
 .c-banner {
-    // diagonal red ribbon on the top right of the page
-    // TODO
+    position: fixed;
+    top: 3rem;
+    right: 3rem;
+    transform: translateY(-50%)translateX(50%)rotate(45deg);
+    background-color: firebrick;
+    color: white;
+    padding: 0.5rem 1rem;
+    z-index: 1000;
+    text-align: center;
+    width: 10rem;
+
+
+    // small screens
+    @media (max-width: 600px) {
+        top: 1rem;
+        right: 1rem;
+        width: 5rem;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
 }
