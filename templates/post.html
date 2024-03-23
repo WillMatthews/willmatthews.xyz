@@ -6,6 +6,11 @@
       <div class="section-block section-block--description">
         <p class="blog-description">$description$</p>
       </div>
+      $if(draft)$ 
+      <div class="c-banner c-banner--draft">
+        <span class="c-banner__text">Draft</span>
+      </div>
+      $endif$
       <div class="c-meta">
         <span class="c-meta__item">
           <span class="c-meta__item--created">$created$</span>

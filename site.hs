@@ -86,6 +86,16 @@ main = hakyll $ do
     route $ gsubRoute "posts/" (const "")
     compile copyFileCompiler
 
+  -- Publications (PDFs)
+  match "posts/publications/pdf/**" $ do
+    route $ gsubRoute "posts/publications/pdf/" (const "pdf/")
+    compile copyFileCompiler
+
+  -- Publication thumbnails
+  match "posts/publications/thumbs/**" $ do
+    route $ gsubRoute "posts/publications/thumbs/" (const "images/publications/")
+    compile copyFileCompiler
+
   match "scss/main.scss" $ do
     route $ gsubRoute "scss/" (const "css/") `composeRoutes` setExtension "css"
     compile $

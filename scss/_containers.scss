@@ -8,12 +8,11 @@
   hyphens: auto;
 
   max-width: 40rem;
+  font-family: "Cardo";
 
   &--scientific {
-    font-family: "Cardo";
   }
   &--blog {
-    font-family: "Lato"; // this probably should go away
   }
 }
 
@@ -22,7 +21,6 @@
   flex-direction: column;
   min-height: 100vh;
   margin: 0 auto;
-  padding: 5rem 0 0 0;
   width: 100%;
   min-height: calc(100vh - 36rem);
 }
@@ -101,7 +99,24 @@
     text-align: center;
     &__image {
         border-radius: 10%;
-        max-width: 20rem;
+        width: 20rem;
+        max-width: 100%;;
     }
 }
 
+.paperThumbnail {
+    width: 15rem;
+    float: right;
+    margin: 1rem 0 0 2rem;
+
+    // small screens
+    @media (max-width: 600px) {
+        width: 100%;
+        margin: 2rem 0;
+    }
+}
+
+.c-banner {
+    // diagonal red ribbon on the top right of the page
+    // TODO
+}
