@@ -42,17 +42,20 @@ New blog will be up before the end of 2024.
 
 2024:
 
-- March: Basic Prototype of site running
-- April: Finish Styling
-- May: Improve usability (see gwern.net sidenotes etc)
-- June: Add embeddings, semantic search, etc.
-- July: Publications as HTML
+- August: Basic Prototype of site running
+- September: Finish Styling
+- December: Improve usability (see gwern.net sidenotes etc)
+
+2025:
+
+- February: Add embeddings, semantic search, etc.
+- April: Publications as HTML
 
 ## TODO
 
-- Typescript
-- Render LaTeX inline functions
-- Semantic suggestions with embeddings
+- Typescript (should I use Elm instead? I have no idea)
+- Render LaTeX inline functions (I want to pre-render them all. Mathjax is too heavy).
+- Semantic suggestions with embeddings (Pre-calculate and assign for each post).
 - Search
 - RSS
 - Post list
