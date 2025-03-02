@@ -1,12 +1,70 @@
-# https://taskfile.dev
-
 version: '3'
 
 vars:
-  GREETING: Hello, World!
+  SITE_EXEC: stack exec site
+  WATCH_DIRS: posts/**/* templates/**/* scss/**/* site.hs
 
 tasks:
   default:
     cmds:
-      - echo "{{.GREETING}}"
-    silent: true
+      - task: dev
+
+  build:
+    desc: Build the Haskell project
+    cmds:
+      - stack build
+    sources:
+      - site.hs
+      - willmatthews-xyz.cabal
+      - stack.yaml
+    generates:
+      - .stack-work/**/*
+
+  clean:
+    desc: Clean generated files
+    cmds:
+      - '{{.SITE_EXEC}} clean'
+      - rm -rf _cache
+      - rm -rf _site
+      - rm -rf .stack-work
+
+  serve:
+    desc: Serve the site with live reload
+    deps: [build]
+    cmds:
+      - |
+        {{.SITE_EXEC}} watch --host 0.0.0.0 --port 8000
+
+  watch-scss:
+    desc: Watch SCSS files for changes
+    cmds:
+      - |
+        watchexec -w scss -e scss -- "{{.SITE_EXEC}} rebuild"
+
+  watch-content:
+    desc: Watch content files for changes
+    cmds:
+      - |
+        watchexec -w posts -w templates -e md,html -- "{{.SITE_EXEC}} rebuild"
+
+  watch-haskell:
+    desc: Watch Haskell files and rebuild
+    cmds:
+      - |
+        watchexec -w site.hs -- "task build && {{.SITE_EXEC}} rebuild"
+
+  dev:
+    desc: Start development environment with hot reload
+    deps: [build]
+    cmds:
+      - task: serve & task: watch-scss & task: watch-content & task: watch-haskell
+    interactive: true
+
+  deploy:
+    desc: Deploy the site
+    deps: [build]
+    cmds:
+      - '{{.SITE_EXEC}} clean'
+      - '{{.SITE_EXEC}} build'
+      # Add your deployment commands here
+
