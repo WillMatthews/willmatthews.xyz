@@ -159,3 +159,4 @@ myFeedConfiguration =
       feedAuthorEmail = "test@example.com",
       feedRoot = "http://willmatthews.xyz"
     }
+
