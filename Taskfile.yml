@@ -68,3 +68,27 @@ tasks:
       - '{{.SITE_EXEC}} build'
       # Add your deployment commands here
 
+  bootstrap:
+    desc: First-time setup of the project and its dependencies
+    cmds:
+      - task: check-deps
+      - task: install-deps
+      - task: build
+      - echo "🚀 Project setup complete! Run 'task dev' to start development"
+
+  check-deps:
+    desc: Check if required dependencies are installed
+    internal: true
+    cmds:
+      - |
+        echo "Checking dependencies..."
+        {{.SHELL}} ./scripts/check-dependencies.sh
+
+  install-deps:
+    desc: Install project dependencies
+    internal: true
+    cmds:
+      - |
+        echo "Installing project dependencies..."
+        {{.SHELL}} ./scripts/install-dependencies.sh
+
